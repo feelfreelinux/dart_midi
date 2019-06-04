@@ -1,0 +1,11 @@
+name: midi
+description: Dart-only MIDI parser and writer implementation
+version: 1.0.0
+author: Filip Grzywok (f.grzywok@gmail.com)
+homepage: https://github.com/feelfreelinux/midi
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dev_dependencies:
+  test: ^1.6.4
