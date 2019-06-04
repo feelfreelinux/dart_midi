@@ -1,3 +1,7 @@
+[![version][version-badge]][package-link]
+[![MIT License][license-badge]][license-link]
+[![PRs Welcome][prs-badge]](http://makeapullrequest.com)
+
 # dart_midi
 
 A dart package that provides a parser and writer implementation for midi data.
