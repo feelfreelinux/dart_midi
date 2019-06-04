@@ -36,8 +36,8 @@ class MidiWriter {
   void writeTrack(ByteWriter w, List<MidiEvent> track,
       {bool running = false, bool useByte9ForNoteOff = false}) {
     var t = new ByteWriter();
-    var i, len = track.length;
-    var eventTypeByte;
+    int i, len = track.length;
+    int eventTypeByte;
     for (i = 0; i < len; i++) {
       // Reuse last eventTypeByte when opts.running is set, or event.running is explicitly set on it.
       // parseMidi will set event.running for each event, so that we can get an exact copy by default.

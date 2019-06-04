@@ -49,7 +49,7 @@ class ByteWriter {
   }
 
   void writeString(String str) {
-    var i, len = str.length;
+    int i, len = str.length;
     List<int> arr = [];
 
     for (i = 0; i < len; i++) {
