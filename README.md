@@ -1,7 +1,6 @@
-[![version][version-badge]][package-link]
-[![MIT License][license-badge]][license-link]
-[![PRs Welcome][prs-badge]](http://makeapullrequest.com)
-
+[![pub package](https://img.shields.io/pub/v/dart_midi.svg)](https://pub.dartlang.org/packages/dart_midi)
+[![GitHub license](https://img.shields.io/github/license/feelfreelinux/dart_midi.svg)](https://github.com/feelfreelinux/dart_midi/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/feelfreelinux/dart_midi.svg)](https://github.com/feelfreelinux/dart_midi/issues)
 # dart_midi
 
 A dart package that provides a parser and writer implementation for midi data.
