@@ -1,5 +1,5 @@
-import 'package:midi/src/midi_events.dart';
-import 'package:midi/src/midi_header.dart';
+import 'package:dart_midi/src/midi_events.dart';
+import 'package:dart_midi/src/midi_header.dart';
 
 class MidiFile {
   final List<List<MidiEvent>> tracks;

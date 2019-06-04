@@ -1,8 +1,8 @@
 
-import 'package:midi/src/byte_reader.dart';
-import 'package:midi/src/midi_events.dart';
-import 'package:midi/src/midi_file.dart';
-import 'package:midi/src/midi_header.dart';
+import 'package:dart_midi/src/byte_reader.dart';
+import 'package:dart_midi/src/midi_events.dart';
+import 'package:dart_midi/src/midi_file.dart';
+import 'package:dart_midi/src/midi_header.dart';
 import 'dart:io';
 
 /// MidiParser is a class responsible of parsing MIDI data into dart objects

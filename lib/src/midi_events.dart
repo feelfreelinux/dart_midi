@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:midi/src/byte_writer.dart';
+import 'package:dart_midi/src/byte_writer.dart';
 
 abstract class MidiEvent {
   String type;

@@ -1,4 +1,4 @@
-# midi
+# dart_midi
 
 A dart package that provides a parser and writer implementation for midi data.
 

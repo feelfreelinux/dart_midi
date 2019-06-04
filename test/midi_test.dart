@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:midi/midi.dart';
+import 'package:dart_midi/dart_midi.dart';
 
 void main() {
   test('parser and writer output matches', () {
