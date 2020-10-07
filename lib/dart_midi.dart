@@ -6,3 +6,5 @@ export 'src/midi_header.dart';
 export 'src/midi_events.dart';
 export 'src/midi_file.dart';
 export 'src/midi_events.dart';
+export 'src/byte_reader.dart';
+export 'src/byte_writer.dart';
