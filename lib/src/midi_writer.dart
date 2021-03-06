@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:dart_midi/src/byte_writer.dart';
 import 'package:dart_midi/src/data_chunk.dart';
 import 'package:dart_midi/src/midi_events.dart';
 import 'package:dart_midi/src/midi_file.dart';
 import 'package:dart_midi/src/midi_header.dart';
-import 'dart:io';
 
 class MidiWriter {
   MidiWriter();
@@ -37,7 +38,7 @@ class MidiWriter {
       {bool running = false, bool useByte9ForNoteOff = false}) {
     var t = new ByteWriter();
     int i, len = track.length;
-    int eventTypeByte;
+    int? eventTypeByte;
     for (i = 0; i < len; i++) {
       // Reuse last eventTypeByte when opts.running is set, or event.running is explicitly set on it.
       // parseMidi will set event.running for each event, so that we can get an exact copy by default.
@@ -58,14 +59,18 @@ class MidiWriter {
 
   /// Writes provided [header] into [w]
   void writeHeader(ByteWriter w, MidiHeader header, int numTracks) {
-    var format = header.format == null ? 1 : header.format;
+    var headerFormat = header.format;
+    int format = headerFormat == null ? 1 : headerFormat;
 
     var timeDivision = 128;
-    if (header.timeDivision != null) {
-      timeDivision = header.timeDivision;
-    } else if (header.ticksPerFrame != null && header.framesPerSecond != null) {
-      timeDivision = (-(header.framesPerSecond & 0xFF) << 8) |
-          (header.ticksPerFrame & 0xFF);
+    var headerTimeDivision = header.timeDivision;
+    var headerFramesPerSecond = header.framesPerSecond;
+    var headerTicksPerFrame = header.ticksPerFrame;
+    if (headerTimeDivision != null) {
+      timeDivision = headerTimeDivision;
+    } else if (headerTicksPerFrame != null && headerFramesPerSecond != null) {
+      timeDivision =
+          (-(headerFramesPerSecond & 0xFF) << 8) | (headerTicksPerFrame & 0xFF);
     } else if (header.ticksPerBeat != 0) {
       timeDivision = header.ticksPerBeat & 0x7FFF;
     }
