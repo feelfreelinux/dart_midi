@@ -37,7 +37,7 @@ class MidiWriter {
       {bool running = false, bool useByte9ForNoteOff = false}) {
     var t = new ByteWriter();
     int i, len = track.length;
-    int eventTypeByte;
+    int? eventTypeByte;
     for (i = 0; i < len; i++) {
       // Reuse last eventTypeByte when opts.running is set, or event.running is explicitly set on it.
       // parseMidi will set event.running for each event, so that we can get an exact copy by default.
@@ -58,16 +58,16 @@ class MidiWriter {
 
   /// Writes provided [header] into [w]
   void writeHeader(ByteWriter w, MidiHeader header, int numTracks) {
-    var format = header.format == null ? 1 : header.format;
+    int format = header.format;
 
     var timeDivision = 128;
     if (header.timeDivision != null) {
-      timeDivision = header.timeDivision;
+      timeDivision = header.timeDivision!;
     } else if (header.ticksPerFrame != null && header.framesPerSecond != null) {
-      timeDivision = (-(header.framesPerSecond & 0xFF) << 8) |
-          (header.ticksPerFrame & 0xFF);
-    } else if (header.ticksPerBeat != 0) {
-      timeDivision = header.ticksPerBeat & 0x7FFF;
+      timeDivision = (-(header.framesPerSecond! & 0xFF) << 8) |
+          (header.ticksPerFrame! & 0xFF);
+    } else if (header.ticksPerBeat != null && header.ticksPerBeat != 0) {
+      timeDivision = header.ticksPerBeat! & 0x7FFF;
     }
 
     var h = new ByteWriter();

@@ -6,7 +6,7 @@ import 'dart:io';
 
 /// MidiParser is a class responsible of parsing MIDI data into dart objects
 class MidiParser {
-  int _lastEventTypeByte;
+  int? _lastEventTypeByte;
 
   MidiParser();
 
@@ -39,9 +39,9 @@ class MidiParser {
 
     final int format = p.readUInt16();
     final int numTracks = p.readUInt16();
-    int framesPerSecond;
-    int ticksPerFrame;
-    int ticksPerBeat;
+    int? framesPerSecond;
+    int? ticksPerFrame;
+    int? ticksPerBeat;
 
     final int timeDivision = p.readUInt16();
     if (timeDivision & 0x8000 != 0) {
@@ -170,7 +170,7 @@ class MidiParser {
               throw 'Expected length for smpteOffset event is 5, got ${length.toString()}';
             var hourByte = p.readUInt8();
             var frameRates = {0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30};
-            event.frameRate = frameRates[hourByte & 0x60];
+            event.frameRate = frameRates[hourByte & 0x60]!;
             event.hour = hourByte & 0x1f;
             event.min = p.readUInt8();
             event.sec = p.readUInt8();
@@ -238,7 +238,7 @@ class MidiParser {
         if (_lastEventTypeByte == null)
           throw "Running status byte encountered before status byte";
         param1 = eventTypeByte;
-        eventTypeByte = _lastEventTypeByte;
+        eventTypeByte = _lastEventTypeByte!;
         running = true;
       } else {
         param1 = p.readUInt8();
@@ -280,7 +280,6 @@ class MidiParser {
             if (velocity == 0) event.byte9 = true;
             return event;
           }
-          break;
         case 0x0a:
           var event = NoteAfterTouchEvent();
           event.channel = channel;

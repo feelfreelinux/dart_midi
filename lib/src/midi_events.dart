@@ -3,20 +3,20 @@ import 'dart:math';
 import 'package:dart_midi/src/byte_writer.dart';
 
 abstract class MidiEvent {
-  String type;
+  String type = '';
   int deltaTime = 0;
   bool meta = false;
   bool running = false;
 
   // ByteWriter stuff
-  int lastEventTypeByte;
+  int? lastEventTypeByte;
   bool useByte9ForNoteOff = false;
 
   int writeEvent(ByteWriter w);
 }
 
 class SequenceNumberEvent extends MidiEvent {
-  int number;
+  int number = 0;
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -39,10 +39,10 @@ class EndOfTrackEvent extends MidiEvent {
 }
 
 class ProgramChangeMidiEvent extends MidiEvent {
-  int channel;
-  int programNumber;
+  int channel = 0;
+  int programNumber = 0;
   int writeEvent(ByteWriter w) {
-    var eventTypeByte = 0xC0 | channel;
+    int eventTypeByte = 0xC0 | channel;
     if (eventTypeByte != lastEventTypeByte) w.writeUInt8(eventTypeByte);
     w.writeUInt8(programNumber);
     return eventTypeByte;
@@ -50,8 +50,8 @@ class ProgramChangeMidiEvent extends MidiEvent {
 }
 
 class ChannelAfterTouchEvent extends MidiEvent {
-  int channel;
-  int amount;
+  int channel = 0;
+  int amount = 0;
 
   int writeEvent(ByteWriter w) {
     var eventTypeByte = 0xD0 | channel;
@@ -62,8 +62,8 @@ class ChannelAfterTouchEvent extends MidiEvent {
 }
 
 class PitchBendEvent extends MidiEvent {
-  int channel;
-  int value;
+  int channel = 0;
+  int value = 0; // A pitch bend value from -8192 to 8191. Defaults to 0, or no bend.
 
   int writeEvent(ByteWriter w) {
     var eventTypeByte = 0xE0 | channel;
@@ -78,10 +78,10 @@ class PitchBendEvent extends MidiEvent {
 }
 
 class ControllerEvent extends MidiEvent {
-  int controllerType;
-  int channel;
-  int value;
-  int number;
+  int controllerType = 0;
+  int channel = 0;
+  int value = 0;
+  int? number;
 
   int writeEvent(ByteWriter w) {
     var eventTypeByte = 0xB0 | channel;
@@ -93,9 +93,9 @@ class ControllerEvent extends MidiEvent {
 }
 
 class NoteOnEvent extends MidiEvent {
-  int noteNumber;
-  int velocity;
-  int channel;
+  int noteNumber = 60;
+  int velocity = 127;
+  int channel = 0;
   bool byte9 = false;
 
   int writeEvent(ByteWriter w) {
@@ -108,9 +108,9 @@ class NoteOnEvent extends MidiEvent {
 }
 
 class NoteAfterTouchEvent extends MidiEvent {
-  int noteNumber;
-  int amount;
-  int channel;
+  int noteNumber = 60;
+  int amount = 0;
+  int channel = 0;
 
   int writeEvent(ByteWriter w) {
     var eventTypeByte = 0xA0 | channel;
@@ -122,9 +122,9 @@ class NoteAfterTouchEvent extends MidiEvent {
 }
 
 class NoteOffEvent extends MidiEvent {
-  int noteNumber;
-  int channel;
-  int velocity;
+  int noteNumber = 60;
+  int channel = 0;
+  int velocity = 0;
   bool byte9 = false;
 
   int writeEvent(ByteWriter w) {
@@ -145,7 +145,7 @@ class NoteOffEvent extends MidiEvent {
 }
 
 class TextEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -158,7 +158,7 @@ class TextEvent extends MidiEvent {
 }
 
 class CopyrightNoticeEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -171,7 +171,7 @@ class CopyrightNoticeEvent extends MidiEvent {
 }
 
 class LyricsEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -184,7 +184,7 @@ class LyricsEvent extends MidiEvent {
 }
 
 class MarkerEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -197,7 +197,7 @@ class MarkerEvent extends MidiEvent {
 }
 
 class CuePointEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -210,7 +210,7 @@ class CuePointEvent extends MidiEvent {
 }
 
 class InstrumentNameEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -223,7 +223,7 @@ class InstrumentNameEvent extends MidiEvent {
 }
 
 class TrackNameEvent extends MidiEvent {
-  String text;
+  String text = '';
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -236,7 +236,7 @@ class TrackNameEvent extends MidiEvent {
 }
 
 class ChannelPrefixEvent extends MidiEvent {
-  int channel;
+  int channel = 0;
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -249,7 +249,7 @@ class ChannelPrefixEvent extends MidiEvent {
 }
 
 class PortPrefixEvent extends MidiEvent {
-  int port;
+  int port = 0;
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -262,7 +262,7 @@ class PortPrefixEvent extends MidiEvent {
 }
 
 class SetTempoEvent extends MidiEvent {
-  int microsecondsPerBeat;
+  int microsecondsPerBeat = 500000;
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -275,7 +275,7 @@ class SetTempoEvent extends MidiEvent {
 }
 
 class SequencerSpecificEvent extends MidiEvent {
-  List<int> data;
+  List<int> data = [];
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
@@ -289,7 +289,7 @@ class SequencerSpecificEvent extends MidiEvent {
 }
 
 class SystemExclusiveEvent extends MidiEvent {
-  List<int> data;
+  List<int> data = [];
   int writeEvent(ByteWriter w) {
     w.writeUInt8(0xF0);
     w.writeVarInt(data.length);
@@ -300,7 +300,7 @@ class SystemExclusiveEvent extends MidiEvent {
 }
 
 class EndSystemExclusiveEvent extends MidiEvent {
-  List<int> data;
+  List<int> data = [];
 
   int writeEvent(ByteWriter w) {
     w.writeUInt8(0xF7);
@@ -313,13 +313,13 @@ class EndSystemExclusiveEvent extends MidiEvent {
 class UnknownMetaEvent extends MidiEvent {
   bool meta = true;
 
-  List<int> data;
-  int metatypeByte;
+  List<int> data = [];
+  int? metatypeByte;
 
   int writeEvent(ByteWriter w) {
     if (metatypeByte != null) {
       w.writeUInt8(0xFF);
-      w.writeUInt8(metatypeByte);
+      w.writeUInt8(metatypeByte!);
       w.writeVarInt(data.length);
       w.writeBytes(data);
     }
@@ -331,18 +331,18 @@ class UnknownMetaEvent extends MidiEvent {
 class SmpteOffsetEvent extends MidiEvent {
   bool meta = true;
 
-  int frameRate;
-  int hour;
-  int min;
-  int sec;
-  int frame;
-  int subFrame;
+  int frameRate = 24;
+  int hour = 0;
+  int min = 0;
+  int sec = 0;
+  int frame = 0;
+  int subFrame = 0;
   int writeEvent(ByteWriter w) {
     w.writeUInt8(0xFF);
     w.writeUInt8(0x54);
     w.writeVarInt(5);
     var frameRates = {24: 0x00, 25: 0x20, 29: 0x40, 30: 0x60};
-    var hourByte = (hour & 0x1F) | frameRates[frameRate];
+    var hourByte = (hour & 0x1F) | frameRates[frameRate]!;
     w.writeUInt8(hourByte);
     w.writeUInt8(min);
     w.writeUInt8(sec);
@@ -355,10 +355,10 @@ class SmpteOffsetEvent extends MidiEvent {
 class TimeSignatureEvent extends MidiEvent {
   bool meta = true;
 
-  int numerator;
-  int denominator;
-  int metronome;
-  int thirtyseconds;
+  int numerator = 4;
+  int denominator = 4;
+  int metronome = 18;
+  int thirtyseconds = 8;
 
   int writeEvent(ByteWriter w) {
     w.writeUInt8(0xFF);
@@ -368,14 +368,14 @@ class TimeSignatureEvent extends MidiEvent {
     var _denominator = (log(denominator) / ln2).floor() & 0xFF;
     w.writeUInt8(_denominator);
     w.writeUInt8(metronome);
-    w.writeUInt8(thirtyseconds ?? 8);
+    w.writeUInt8(thirtyseconds);
     return -1;
   }
 }
 
 class KeySignatureEvent extends MidiEvent {
-  int key;
-  int scale;
+  int key = 0;
+  int scale = 0;
   bool meta = true;
 
   int writeEvent(ByteWriter w) {
