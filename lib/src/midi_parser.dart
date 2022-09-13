@@ -332,11 +332,28 @@ class MidiParser {
     var p = new ByteReader(data);
 
     List<MidiEvent> events = [];
+    int tickFromStart = 0;
     while (!p.eof) {
       var event = readEvent(p);
+      tickFromStart += event.deltaTime;
+      event.tickFromStart = tickFromStart;
       events.add(event);
     }
-
+    for (int i = 0; i < events.length; i++) {
+      if (events[i] is NoteOnEvent) {
+        NoteOnEvent noteOn = events[i] as NoteOnEvent;
+        for (int j = i; j < events.length; j++) {
+          if (events[j] is NoteOffEvent) {
+            NoteOffEvent noteOff = events[j] as NoteOffEvent;
+            if (noteOn.noteNumber == noteOff.noteNumber &&
+                noteOn.channel == noteOff.channel) {
+              noteOn.duration = noteOff.tickFromStart - noteOn.tickFromStart;
+              break;
+            }
+          }
+        }
+      }
+    }
     return events;
   }
 }
