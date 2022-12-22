@@ -339,6 +339,7 @@ class MidiParser {
       event.tickFromStart = tickFromStart;
       events.add(event);
     }
+    List<NoteOffEvent> usedNoteOff = [];
     for (int i = 0; i < events.length; i++) {
       if (events[i] is NoteOnEvent) {
         NoteOnEvent noteOn = events[i] as NoteOnEvent;
@@ -346,8 +347,10 @@ class MidiParser {
           if (events[j] is NoteOffEvent) {
             NoteOffEvent noteOff = events[j] as NoteOffEvent;
             if (noteOn.noteNumber == noteOff.noteNumber &&
-                noteOn.channel == noteOff.channel) {
+                noteOn.channel == noteOff.channel &&
+                !usedNoteOff.contains(noteOff)) {
               noteOn.duration = noteOff.tickFromStart - noteOn.tickFromStart;
+              usedNoteOff.add(noteOff);
               break;
             }
           }
